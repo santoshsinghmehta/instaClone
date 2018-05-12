@@ -1,0 +1,29 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>instClone</title>
+</head>
+<body>
+    {% for post in posts %}
+
+        <h3> Posted by: {{ post.user.username }}</h3>
+
+        <img src="{{ post.image_url }}" style= "width:500px" >
+
+        <p>{{ post.caption }}</p>
+        <div style="display:inline-block">
+            {{ post.like_count }} like this
+        </div>
+        <form method="POST" action="/like/">
+              {% csrf_token %}
+                <input type="hidden" name="post" value="{{ post.id }}" />
+                <input type="submit" class="btn btn-default" value="Like">
+        </form>
+        <br/><br/>
+
+    {% endfor %}
+</body>
+</html>
