@@ -8,7 +8,8 @@ from myproject.settings import BASE_DIR
 
 from imgurpython import ImgurClient
 
-
+YOUR_CLIENT_ID = 'f5119726c4ba0f9'
+YOUR_CLIENT_SECRET = '466ab27d37ccc8506b870ea2ad5a6c757738bf9c'
 # Create your views here.
 
 def signup_view(request):
@@ -69,7 +70,7 @@ def post_view(request):
                 post = PostModel(user=user, image=image, caption=caption)
                 post.save()
 
-                path = str(BASE_DIR + post.image.url)
+                path = str(BASE_DIR + '/' +post.image.url)
 
                 client = ImgurClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET)
                 post.image_url = client.upload_from_path(path, anon=True)['link']
@@ -89,12 +90,6 @@ def feed_view(request):
     if user:
 
         posts = PostModel.objects.all().order_by('created_on')
-
-        for post in posts:
-            existing_like = LikeModel.objects.filter(post_id=post.id, user=user).first()
-            if existing_like:
-                post.has_liked = True
-
         return render(request, 'feed.html', {'posts': posts})
     else:
 
